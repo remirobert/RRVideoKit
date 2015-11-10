@@ -1,0 +1,18 @@
+PODS:
+  - Bolts (1.4.0):
+    - Bolts/AppLinks (= 1.4.0)
+    - Bolts/Tasks (= 1.4.0)
+  - Bolts/AppLinks (1.4.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.4.0)
+  - FCFileManager (1.0.17)
+
+DEPENDENCIES:
+  - Bolts
+  - FCFileManager
+
+SPEC CHECKSUMS:
+  Bolts: 0e9bce58b9b9f5e8a7a4d47b16d2fabec289072b
+  FCFileManager: 8bfc931ce2a6223676147e9baf0e8a65c691eca6
+
+COCOAPODS: 0.39.0
