@@ -11,5 +11,6 @@
 @interface RRVideoChunck (Initialize)
 
 + (NSArray *)initializeChuncks:(id)video framesChunck:(NSInteger)framePerChunck;
++ (void)cleanChunckfiles:(NSArray *)chuncks;
 
 @end

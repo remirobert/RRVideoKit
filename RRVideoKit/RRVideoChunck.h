@@ -13,5 +13,9 @@
 @interface RRVideoChunck : NSObject
 
 @property (nonatomic, strong) NSMutableArray *framesIndex;
+@property (nonatomic, strong) NSString *chunckName;
+@property (nonatomic, strong) id video;
+
+- (NSArray *)frames:(id)video;
 
 @end

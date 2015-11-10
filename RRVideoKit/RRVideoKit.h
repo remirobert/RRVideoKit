@@ -14,5 +14,7 @@
 #import <FCFileManager.h>
 #import "RRVideo.h"
 #import "RRVideoWritter.h"
+#import "RRVideoChunck.h"
+#import "RRVideoChunck+Initialize.h"
 
 #endif /* RRVideoKit_h */

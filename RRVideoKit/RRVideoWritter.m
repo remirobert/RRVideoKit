@@ -53,9 +53,11 @@
     return pxbuffer;
 }
 
-- (BFTask *)writeImageAsMovie:(RRVideo *)video toPath:(NSString *)path {
+- (BFTask *)writeImageAsMovie:(RRVideo *)video currentChunck:(RRVideoChunck *)chunck toPath:(NSString *)path {
     BFTaskCompletionSource *task = [BFTaskCompletionSource taskCompletionSource];
     __block CVPixelBufferRef buffer = NULL;
+    __block NSArray *frames = [chunck frames:video];
+    
     AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:path]
                                                            fileType:AVFileTypeQuickTimeMovie
                                                               error:nil];
@@ -97,13 +99,13 @@
                     presentTime = CMTimeMake(0, 600);
                 }
                 
-                if (currentIndexFrame >= [video.frames count]) {
+                if (currentIndexFrame >= [frames count]) {
                     CVPixelBufferRelease(buffer);
                     buffer = NULL;
                 }
                 else {
                     CVPixelBufferRelease(buffer);
-                    UIImage *currentImage = [video.frames objectAtIndex:currentIndexFrame];
+                    UIImage *currentImage = [frames objectAtIndex:currentIndexFrame];
                     buffer = [self pixelBufferFromCGImage:[currentImage CGImage] image:currentImage];
                 }
                 
@@ -135,13 +137,13 @@
     return task.task;
 }
 
-- (BFTask *)writteVideo:(RRVideo *)video {
+- (BFTask *)writteVideo:(RRVideo *)video currentChunck:(RRVideoChunck *)chunck {
     BFTaskCompletionSource *taskCompletion = [BFTaskCompletionSource taskCompletionSource];
     
-    NSString *path = [self path:video.videoFile];
+    NSString *path = [self path:chunck.chunckName];
     [FCFileManager removeItemAtPath:path];
     
-    [[self writeImageAsMovie:video toPath:path] continueWithSuccessBlock:^id(BFTask *task) {
+    [[self writeImageAsMovie:video currentChunck:chunck toPath:path] continueWithSuccessBlock:^id(BFTask *task) {
         NSString *path = (NSString *)task.result;
         [taskCompletion setResult:[NSURL URLWithString:path]];
         return nil;

@@ -11,7 +11,7 @@
 
 @implementation RRVideoChunck
 
-- (NSArray *)images:(RRVideo *)video {
+- (NSArray *)frames:(RRVideo *)video {
     NSMutableArray *array = [NSMutableArray array];
     
     for (NSNumber *currentIndex in self.framesIndex) {

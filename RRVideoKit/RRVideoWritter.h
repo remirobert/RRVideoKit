@@ -12,6 +12,8 @@
 
 @interface RRVideoWritter : NSObject
 
-- (BFTask *)writteVideo:(id)video;
+@property (nonatomic, strong) id video;
+
+- (BFTask *)writteVideo:(id)video currentChunck:(id)chunck;
 
 @end

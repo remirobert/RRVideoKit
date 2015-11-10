@@ -11,6 +11,8 @@
 @interface RRVideo ()
 @property (nonatomic, strong) RRVideoWritter *videoWritter;
 @property (nonatomic, strong) NSMutableArray *urlsChunckVideo;
+@property (nonatomic, assign) NSInteger currentIndexChunck;
+@property (nonatomic, strong) NSArray *chuncks;
 @end
 
 @implementation RRVideo
@@ -39,13 +41,24 @@
     return self;
 }
 
+- (NSArray *)tasks {
+    NSMutableArray *tasksArray = [NSMutableArray array];
+    for (RRVideoChunck *currentChunk in self.chuncks) {
+        NSLog(@"curre chunck : %@", currentChunk.framesIndex);
+        [tasksArray addObject:[self.videoWritter writteVideo:self currentChunck:currentChunk]];
+    }
+    return tasksArray;
+}
+
 - (BFTask *)writeVideo {
     BFTaskCompletionSource *taskCompletion = [BFTaskCompletionSource taskCompletionSource];
 
     self.urlsChunckVideo = [NSMutableArray array];
-    __block NSArray *tasks = @[[self.videoWritter writteVideo:self], [self.videoWritter writteVideo:self], [self.videoWritter writteVideo:self]];
-
-    [[BFTask taskForCompletionOfAllTasksWithResults:tasks] continueWithBlock:^id(BFTask *task) {
+    self.videoWritter.video = self;
+    self.currentIndexChunck = 0;
+    self.chuncks = [RRVideoChunck initializeChuncks:self framesChunck:RRVideoKitDefaultNumberFramePerChunck];
+    
+    [[BFTask taskForCompletionOfAllTasksWithResults:[self tasks]] continueWithBlock:^id(BFTask *task) {
         self.urlsChunckVideo = task.result;
         
         
