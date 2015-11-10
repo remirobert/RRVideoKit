@@ -44,7 +44,6 @@
 - (NSArray *)tasks {
     NSMutableArray *tasksArray = [NSMutableArray array];
     for (RRVideoChunck *currentChunk in self.chuncks) {
-        NSLog(@"curre chunck : %@", currentChunk.framesIndex);
         [tasksArray addObject:[self.videoWritter writteVideo:self currentChunck:currentChunk]];
     }
     return tasksArray;
@@ -61,9 +60,10 @@
     [[BFTask taskForCompletionOfAllTasksWithResults:[self tasks]] continueWithBlock:^id(BFTask *task) {
         self.urlsChunckVideo = task.result;
         
-        
-        // merge and result the final URL
-        [taskCompletion setResult:task.result];
+        [[RRVideoMerge mergeVideo:self.urlsChunckVideo nameFile:self.videoFile] continueWithSuccessBlock:^id(BFTask *task) {
+            [taskCompletion setResult:task.result];
+            return nil;
+        }];
         return nil;
     }];
     return taskCompletion.task;

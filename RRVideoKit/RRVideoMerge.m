@@ -7,6 +7,7 @@
 //
 
 #import "RRVideoMerge.h"
+#import "RRVideoKit.h"
 
 @implementation RRVideoMerge
 
@@ -20,9 +21,14 @@
         AVMutableCompositionTrack *track = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
         
         for (NSURL *currentVideoUrl in urls) {
+            
+            if (![FCFileManager existsItemAtPath:[currentVideoUrl absoluteString]]) {
+                [taskCompletion setResult:nil];
+            }
+            
             AVAsset *asset = [AVAsset assetWithURL:currentVideoUrl];
             AVAssetTrack *currentTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
-            
+                        
             if (index) {
                 [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, [asset duration]) ofTrack:currentTrack atTime:kCMTimeZero error:nil];
             }

@@ -16,5 +16,6 @@
 #import "RRVideoWritter.h"
 #import "RRVideoChunck.h"
 #import "RRVideoChunck+Initialize.h"
+#import "RRVideoMerge.h"
 
 #endif /* RRVideoKit_h */
